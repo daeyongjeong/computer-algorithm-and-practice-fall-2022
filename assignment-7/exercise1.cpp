@@ -362,7 +362,7 @@ void RedBlackTree::insert_fixup(struct node *z)
         }
     }
 
-    root->color == BLACK;
+    root->color = BLACK;
 }
 
 vector<int> *create_random_data(int n)
