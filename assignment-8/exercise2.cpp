@@ -26,15 +26,15 @@ int main()
     for (int i = 0; i < 100; ++i)
         for (int j = 0; j < 100; ++j)
             text[i][j] = 'A';
-    text[99][99] = 'B';
 
     for (int i = 0; i < 10; ++i)
         for (int j = 0; j < 10; ++j)
             pattern[i][j] = 'A';
     pattern[9][9] = 'B';
 
-    rabin_karp_matcher(text, pattern, 32, 33554393);
     brute_force_matcher(text, pattern);
+    rabin_karp_matcher(text, pattern, 32, 33554393);
+    return 0;
 }
 
 /* Function definitions */
@@ -70,6 +70,7 @@ void print_comparisons()
 void brute_force_matcher(const char text[100][100], const char pattern[10][10])
 {
     comparison = 0;
+    cout << "Brute-force matcher" << endl;
 
     for (int col = 0; col <= n - m; ++col)
         for (int row = 0; row <= n - m; ++row)
@@ -85,6 +86,7 @@ void rabin_karp_matcher(const char text[100][100], const char pattern[10][10], c
     long p = 0;
     long t = 0;
     comparison = 0;
+    cout << "Rabin-Karp matcher" << endl;
 
     // initialize h to value of high-order digit position
     for (int i = 0; i < m - 1; ++i)
@@ -103,13 +105,8 @@ void rabin_karp_matcher(const char text[100][100], const char pattern[10][10], c
         for (int row = 0; row <= n - m; ++row)
         {
             if (p == t) // hit
-            {
-                cout << "col: " << col << ", row: " << row << ", p: " << p << ", t: " << t << endl;
                 if (test_valid_shift(text, pattern, col, row))
                     print_valid_shift(text, pattern, col, row);
-                else
-                    print_spurious_hit(col, row);
-            }
 
             if (row < n - m) // compute value for next window
             {
