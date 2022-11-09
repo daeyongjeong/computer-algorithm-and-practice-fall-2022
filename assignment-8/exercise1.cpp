@@ -1,23 +1,25 @@
-#include <string>
 #include <iostream>
+#include <string>
 #include <vector>
 using namespace std;
 
 /* Function declarations */
-void naive_string_matcher(const string text, const string pattern);
+void brute_force_matcher(const string text, const string pattern);
 void rabin_karp_matcher(const string text, const string pattern, const int radix, const int prime);
 void kmp_matcher(const string text, const string pattern);
 vector<int> compute_prefix_function(const string pattern);
 void print_valid_shift(const string text, const string pattern, const int shift);
 bool test_valid_shift(const string text, const string pattern, const int shift);
 
-/* Main function */
+/* Data declarations */
 int comparison = 0;
+
+/* Main function */
 int main()
 {
     const string text = "A STRING SEARCHING EXAMPLE CONSISTING OF A GIVEN STING";
     const string pattern = "STING";
-    naive_string_matcher(text, pattern);
+    brute_force_matcher(text, pattern);
     rabin_karp_matcher(text, pattern, 32, 33554393);
     kmp_matcher(text, pattern);
     return 0;
@@ -27,18 +29,14 @@ int main()
 bool test_valid_shift(const string text, const string pattern, const int shift)
 {
     const int m = pattern.length();
-    bool valid_shift = true;
 
     for (int i = 0; i < m; ++i)
     {
         comparison += 1;
         if (pattern[i] != text[shift + i])
-        {
-            valid_shift = false;
-            break;
-        }
+            return false;
     }
-    return valid_shift;
+    return true;
 }
 
 void print_valid_shift(const string text, const string pattern, const int shift)
@@ -53,18 +51,17 @@ void print_valid_shift(const string text, const string pattern, const int shift)
          << endl;
 }
 
-void print_comparisons()
-{
-    cout << "Comparisons " << comparison << endl;
-}
-
 void print_spurious_hit(const int shift)
 {
     cout << "Pattern hits spurious with shift " << shift << endl;
 }
 
-// brutesearch
-void naive_string_matcher(const string text, const string pattern)
+void print_comparisons()
+{
+    cout << "Comparisons " << comparison << endl;
+}
+
+void brute_force_matcher(const string text, const string pattern)
 {
     const int n = text.length();
     const int m = pattern.length();
@@ -76,7 +73,6 @@ void naive_string_matcher(const string text, const string pattern)
     print_comparisons();
 }
 
-// rksearch
 void rabin_karp_matcher(const string text, const string pattern, const int radix, const int prime)
 {
     const int n = text.length();
@@ -139,7 +135,6 @@ vector<int> compute_prefix_function(const string pattern)
     return pi;
 }
 
-// kmpsearch
 void kmp_matcher(const string text, const string pattern)
 {
     const int n = text.length();
