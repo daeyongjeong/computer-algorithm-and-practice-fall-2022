@@ -34,7 +34,6 @@ int main()
 bool test_valid_shift(const string text, const string pattern, const int shift)
 {
     const int m = pattern.length();
-
     for (int i = 0; i < m; ++i)
     {
         comparison += 1;
@@ -71,6 +70,7 @@ void brute_force_matcher(const string text, const string pattern)
     const int n = text.length();
     const int m = pattern.length();
     comparison = 0;
+    cout << "Brute-force matcher" << endl;
 
     for (int shift = 0; shift <= n - m; ++shift)
         if (test_valid_shift(text, pattern, shift))
@@ -83,9 +83,10 @@ void rabin_karp_matcher(const string text, const string pattern, const int radix
     const int n = text.length();
     const int m = pattern.length();
     int h = 1;
-    int p = 0;
-    int t = 0;
+    long p = 0;
+    long t = 0;
     comparison = 0;
+    cout << "Rabin-Karp matcher" << endl;
 
     // initialize h to value of high-order digit position
     for (int i = 0; i < m - 1; ++i)
@@ -101,13 +102,10 @@ void rabin_karp_matcher(const string text, const string pattern, const int radix
     // matching
     for (int shift = 0; shift <= n - m; ++shift)
     {
+        comparison += 1;
         if (p == t) // hit
-        {
             if (test_valid_shift(text, pattern, shift))
                 print_valid_shift(text, pattern, shift);
-            else
-                print_spurious_hit(shift);
-        }
 
         if (shift < n - m) // compute value for next window
         {
@@ -147,6 +145,7 @@ void kmp_matcher(const string text, const string pattern)
     const vector<int> pi = compute_prefix_function(pattern);
     int q = 0; // number of characters matched
     comparison = 0;
+    cout << "KMP matcher" << endl;
 
     for (int i = 0; i < n; ++i)
     {
