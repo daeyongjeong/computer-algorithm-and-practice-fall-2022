@@ -19,9 +19,14 @@ int main()
 {
     const string text = "A STRING SEARCHING EXAMPLE CONSISTING OF A GIVEN STING";
     const string pattern = "STING";
+    const string worst_text = "AAAAAAAAAAAAAAAAAAAAAAAA";
+    const string worst_pattern = "AAAAAAAAAB";
     brute_force_matcher(text, pattern);
     rabin_karp_matcher(text, pattern, 32, 33554393);
     kmp_matcher(text, pattern);
+    brute_force_matcher(worst_text, worst_pattern);
+    rabin_karp_matcher(worst_text, worst_pattern, 32, 33554393);
+    kmp_matcher(worst_text, worst_pattern);
     return 0;
 }
 
