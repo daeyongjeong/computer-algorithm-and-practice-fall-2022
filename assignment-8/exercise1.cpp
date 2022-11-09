@@ -20,6 +20,7 @@ int main()
     naive_string_matcher(text, pattern);
     rabin_karp_matcher(text, pattern, 32, 33554393);
     kmp_matcher(text, pattern);
+    return 0;
 }
 
 /* Function definitions */
