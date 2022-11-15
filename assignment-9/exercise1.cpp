@@ -2,26 +2,31 @@
 #include <random>
 #include <vector>
 #include <set>
+#include <algorithm>
 using namespace std;
 
 struct Point
 {
+public:
+    Point(int, int);
     int x;
     int y;
-    char c;
 };
 
 struct Line
 {
+    Line(Point, Point);
+    static int comparison_degree(Line, Line);
     Point p1;
     Point p2;
+    float degree;
+    float compute_degree(Point, Point);
 };
 
 struct Polygon
 {
     vector<Point> points;
     Polygon(vector<Point>);
-    float compute_degree(Point, Point);
     void print_points();
     void add_point(Point p1);
 };
@@ -32,7 +37,8 @@ struct SimpleClosedPath : Polygon
 };
 
 /* Data declarations */
-int comparison = 0;
+int computations = 0;
+int comparisons = 0;
 
 /* Main function */
 int main()
@@ -57,16 +63,66 @@ int main()
     return 0;
 }
 
+Point::Point(int x = 0, int y = 0) {}
+
+void sort_by_y(vector<Point> vec)
+{
+    for (int j = 1; j < vec.size(); ++j)
+    {
+        Point key = vec[j];
+        int i = j - 1;
+        while (i > 0 && key.y > vec[i].y)
+        {
+            vec[i + 1] = vec[i];
+            i = i - 1;
+        }
+        vec[i + 1] = key;
+    }
+}
+
+Line::Line(Point p1, Point p2)
+{
+    degree = compute_degree(p1, p2);
+}
+
+void sort_by_degree(vector<Line> &vec)
+{
+    for (int j = 1; j < vec.size(); ++j)
+    {
+        Line key = vec[j];
+        int i = j - 1;
+        while (i > 0 && Line::comparison_degree(vec[i], key) > 0)
+        {
+            vec[i + 1] = vec[i];
+            i = i - 1;
+        }
+        vec[i + 1] = key;
+    }
+}
+
 /* Function definitions */
 Polygon::Polygon(vector<Point> points)
 {
+    sort_by_y(points);
+    Point p0 = points.back();
+    points.pop_back();
+    vector<Point> remaining(points);
 
-    // 최소 y를 갖는 점 찾기
-    // 이 점과 나머지 점 사이의 각도 모두 계산해서 float 배열에 넣기
-    // float 배열 insertion sort로 정렬한 다음
-    // 아 그럼 원래 점에 대한 정보를 잃어버리겠구나
-    // 큰 점부터 차례대로 Point 배열에 집어넣기
-    // TODO: 입력을 Set Q로 바꾸기. 겹치는 점이 있으면 동작 안할 가능성 큼
+    points.clear();
+    points.push_back(p0);
+
+    vector<Line> lines;
+    for (Point p : remaining)
+    {
+        Line l(p0, p);
+        lines.push_back(l);
+    }
+
+    sort_by_degree(lines);
+    for (Line l : lines)
+    {
+        points.push_back(l.p2);
+    }
 }
 
 void Polygon::add_point(Point p1)
@@ -74,13 +130,14 @@ void Polygon::add_point(Point p1)
     points.push_back(p1);
 }
 
-float Polygon::compute_degree(Point p1, Point p2)
+float Line::compute_degree(Point p1, Point p2)
 {
     int dx = p2.x - p1.x;
     int dy = p2.y - p1.y;
     int ax = abs(dx);
     int ay = abs(dy);
     int t = 0;
+    computations += 1;
     if (ax + ay != 0)
         t = (float)dy / (ax + ay);
     if (dx < 0)
@@ -94,7 +151,7 @@ void Polygon::print_points()
 {
     for (Point p : points)
     {
-        cout << p.c << "(" << p.x << ", " << p.y << "), ";
+        cout << "(" << p.x << ", " << p.y << "), ";
     }
     cout << endl;
 }
