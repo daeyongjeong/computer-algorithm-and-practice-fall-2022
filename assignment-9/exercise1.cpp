@@ -76,7 +76,7 @@ int main()
 
 // struct Point
 
-Point::Point(const int x, const int y) : x{x}, y{y} {}
+Point::Point(const int x, const int y) : x(x), y(y) {}
 
 string Point::to_string() const
 {
@@ -85,7 +85,7 @@ string Point::to_string() const
 
 // struct Line
 
-Line::Line(const Point p1, const Point p2) : p1{p1}, p2{p2}
+Line::Line(const Point p1, const Point p2) : p1(p1), p2(p2)
 {
     degree = compute_degree(p1, p2);
 }
